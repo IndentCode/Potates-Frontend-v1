@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Empleados</title>
+    <link rel="stylesheet" href="/CSS/styles.css">
+    <!-- Incluye Tailwind CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Incluye Font Awesome desde CDN para los iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Referencia al archivo JavaScript -->
+    <script src="/JS/app.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Barra lateral (sidebar) -->
+    <div class="flex h-screen">
+        <div class="bg-gray-800 text-white w-64 flex flex-col justify-between">
+            <div class="p-4">
+                <h1 class="text-2xl font-semibold mb-4">Potatoes Justin</h1>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="clientes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users mr-2"></i> Clientes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="empleados_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users-cog mr-2"></i> Empleados
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pedidos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-boxes mr-2"></i> Pedidos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pagos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700"
+                            onclick="toggleSubMenu('submenu-pagos')">
+                            <i class="fas fa-money-bill-wave mr-2"></i> Pagos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-chart-line mr-2"></i> Informes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4">
+                <a href="#"
+                    class="block py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white text-center rounded-md">Cerrar
+                    sesión</a>
+            </div>
+        </div>
+        <!-- Contenido principal -->
+        <div class="flex-1 p-8">
+            <h2 class="text-2xl font-semibold mb-4">Gestión de Empleados</h2>
+
+            <!-- Barra de búsqueda y registro de nuevo empleado -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-search text-gray-400"></i>
+                    <input type="text" class="border rounded-md py-2 px-4 w-64 focus:outline-none focus:border-blue-400"
+                        placeholder="Buscar empleados...">
+                </div>
+
+                <!-- Botón para abrir el modal -->
+                <button id="openModalBtn"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                    <i class="fas fa-user-plus mr-2"></i> Registrar Nuevo Empleado
+                </button>
+            </div>
+
+            <!-- Lista de empleados existentes -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6" id="clientesExistentes">
+                <h3 class="text-xl font-semibold mb-4">Empleados existentes</h3>
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Nombre</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">DNI</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Teléfono
+                            </th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Contrato
+                            </th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Fecha de
+                                Ingreso</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <!-- Filas de empleados serán insertadas aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal oculto -->
+            <div id="myModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <!-- Contenido del modal -->
+                <div class="bg-white p-8 rounded-lg shadow-md w-96">
+                    <h3 class="text-xl font-semibold mb-4">Registrar Nuevo Empleado</h3>
+                    <form>
+                        <!-- Campo Nombre -->
+                        <div class="mb-4">
+                            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                            <input type="text" id="nombre" name="nombre"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Campo DNI -->
+                        <div class="mb-4">
+                            <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
+                            <input type="text" id="dni" name="dni"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Campo Fecha de ingreso -->
+                        <div class="mb-4">
+                            <label for="fecha_ingreso" class="block text-sm font-medium text-gray-700">Fecha de
+                                Ingreso</label>
+                            <input type="date" id="fecha_ingreso" name="fecha_ingreso"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Campo Teléfono -->
+                        <div class="mb-4">
+                            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            <input type="text" id="telefono" name="telefono"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Campo Tipo de contrato -->
+                        <div class="mb-4">
+                            <label for="contrato" class="block text-sm font-medium text-gray-700">Tipo de
+                                Contrato</label>
+                            <select id="contrato" name="contrato"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                                <option value="tiempo_completo">Contrato</option>
+                                <option value="temporal">Temporal</option>
+                            </select>
+                        </div>
+                        <!-- Campo Fecha de pago -->
+                        <div class="mb-4">
+                            <label for="fecha_pago" class="block text-sm font-medium text-gray-700">Fecha de
+                                Pago</label>
+                            <input type="date" id="fecha_pago" name="fecha_pago"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Campo Saldo -->
+                        <div class="mb-4">
+                            <label for="saldo" class="block text-sm font-medium text-gray-700">Saldo</label>
+                            <input type="number" id="saldo" name="saldo"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <!-- Botón para enviar el formulario -->
+                        <button type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-md transition duration-300">Registrar
+                            Empleado</button>
+                    </form>
+                    <!-- Botón para cerrar el modal -->
+                    <button id="closeModalBtn" class="mt-4 text-gray-500 hover:text-gray-700">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/JS/empleados.js"></script>
+</body>
+
+</html>

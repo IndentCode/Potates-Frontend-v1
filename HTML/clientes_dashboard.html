@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Clientes</title>
+    <link rel="stylesheet" href="/CSS/styles.css">
+    <link rel="stylesheet" href="/JS/app.js">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <div class="bg-gray-800 text-white w-64 flex flex-col justify-between">
+            <div class="p-4">
+                <h1 class="text-2xl font-semibold mb-4">Potatoes Justin</h1>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="clientes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users mr-2"></i> Clientes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="empleados_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users-cog mr-2"></i> Empleados
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pedidos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-boxes mr-2"></i> Pedidos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pagos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700"
+                            onclick="toggleSubMenu('submenu-pagos')">
+                            <i class="fas fa-money-bill-wave mr-2"></i> Pagos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-chart-line mr-2"></i> Informes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4">
+                <a href="#"
+                    class="block py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white text-center rounded-md">Cerrar
+                    sesión</a>
+            </div>
+        </div>
+        <div class="flex-1 p-8">
+            <h2 class="text-2xl font-semibold mb-4">Gestión de Clientes</h2>
+
+            <!-- Barra de búsqueda y selección de clientes -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-search text-gray-400"></i>
+                    <input type="text" class="border rounded-md py-2 px-4 w-64 focus:outline-none focus:border-blue-400" placeholder="Buscar clientes...">
+                </div>
+                <button id="nuevoClienteBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                    <i class="fas fa-plus-circle mr-2"></i> Agregar Nuevo Cliente
+                </button>
+            </div>
+
+            <!-- Modal para agregar cliente -->
+            <div id="modalAgregarCliente"
+                class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg shadow-md p-6 w-96">
+                    <h3 class="text-xl font-semibold mb-4">Agregar Cliente</h3>
+                    <form id="formularioCliente">
+                        <div class="mb-4">
+                            <label for="nombre_empresa" class="block text-sm font-medium text-gray-700">Nombre</label>
+                            <input type="text" id="nombre_empresa" name="nombre_empresa"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="titular" class="block text-sm font-medium text-gray-700">Titular</label>
+                            <input type="text" id="titular" name="titular"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="ruc" class="block text-sm font-medium text-gray-700">RUC</label>
+                            <input type="text" id="ruc" name="ruc"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            <input type="text" id="telefono" name="telefono"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-md transition duration-300">Guardar
+                            Cliente</button>
+                    </form>
+                    <button id="cerrarModal" class="mt-4 text-sm text-gray-600 hover:text-gray-800">Cerrar</button>
+                </div>
+            </div>
+
+            <!-- Lista de clientes existentes -->
+            <div class="bg-white rounded-lg shadow-md p-6 mt-6" id="clientesExistentes">
+                <h3 class="text-xl font-semibold mb-4">Clientes existentes</h3>
+                <ul id="listaClientes">
+                    <!-- Aquí se llenará dinámicamente la lista de clientes -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JS/clientes.js"></script>
+</body>
+
+</html>

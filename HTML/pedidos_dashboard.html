@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pedidos</title>
+    <!-- Incluye Tailwind CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Incluye Font Awesome desde CDN para los iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Referencia al archivo JavaScript -->
+    <script src="/JS/app.js"></script>
+    <script src="/JS/pedidos.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Barra lateral (sidebar) -->
+    <div class="flex h-screen">
+        <div class="bg-gray-800 text-white w-64 flex flex-col justify-between">
+            <div class="p-4">
+                <h1 class="text-2xl font-semibold mb-4">Potatoes Justin</h1>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="clientes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users mr-2"></i> Clientes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="empleados_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-users-cog mr-2"></i> Empleados
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pedidos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-boxes mr-2"></i> Pedidos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pagos_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700"
+                            onclick="toggleSubMenu('submenu-pagos')">
+                            <i class="fas fa-money-bill-wave mr-2"></i> Pagos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="informes_dashboard.html" class="block py-2 px-4 flex items-center hover:bg-gray-700">
+                            <i class="fas fa-chart-line mr-2"></i> Informes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4">
+                <a href="#"
+                    class="block py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white text-center rounded-md">Cerrar
+                    sesión</a>
+            </div>
+        </div>
+        <!-- Contenido principal -->
+        <div class="flex-1 p-8">
+            <h2 class="text-2xl font-semibold mb-4">Gestión de Pedidos</h2>
+
+            <!-- Sección de filtros -->
+            <div class="mb-6 flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <label for="cliente" class="text-sm font-medium text-gray-700">Cliente:</label>
+                    <select id="cliente" name="cliente"
+                        class="border rounded-md py-2 px-4 focus:outline-none focus:border-blue-400">
+                        <option value="">Todos los clientes</option>
+                        <option value="clienteA">Cliente A</option>
+                        <option value="clienteB">Cliente B</option>
+                        <option value="clienteC">Cliente C</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="fechaPedido" class="text-sm font-medium text-gray-700">Fecha del Pedido:</label>
+                    <input type="date" id="fechaPedido" name="fechaPedido"
+                        class="border rounded-md py-2 px-4 focus:outline-none focus:border-blue-400">
+                </div>
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+            </div>
+
+            <!-- Visualización de la tabla de pedidos con filtros -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6" id="clientesExistentes">
+                <h3 class="text-xl font-semibold mb-4">Tabla de Pedidos</h3>
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Cliente</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Fecha</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Cantidad
+                                (kg)</th>
+                            <th class="py-2 px-4 bg-gray-200 text-left text-sm font-semibold text-gray-700">Precio por
+                                kg</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pedidosTableBody">
+                        <!-- Filas de pedidos serán insertadas aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botón para mostrar la ventana emergente (modal) -->
+            <button id="nuevoPedidoBtn"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md mb-6">
+                <i class="fas fa-plus"></i> Registrar Nuevo Pedido
+            </button>
+
+            <!-- Ventana emergente (modal) para registrar un nuevo pedido -->
+            <div id="nuevoPedidoModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+                <div class="bg-white rounded-lg shadow-md p-6 w-96">
+
+                    <!-- Botón de cierre de la ventana emergente -->
+                    <button id="cerrarModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+
+                    <h3 class="text-xl font-semibold mb-4">Registrar Nuevo Pedido</h3>
+                    <form id="pedidoForm">
+                        <div class="mb-4">
+                            <label for="clienteNuevo" class="block text-sm font-medium text-gray-700">Cliente</label>
+                            <select id="clienteNuevo" name="clienteNuevo"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                                <option value="clienteA">Cliente A</option>
+                                <option value="clienteB">Cliente B</option>
+                                <option value="clienteC">Cliente C</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
+                            <input type="date" id="fecha" name="fecha"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad (kg)</label>
+                            <input type="number" id="cantidad" name="cantidad" min="1" step="any"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="precio" class="block text-sm font-medium text-gray-700">Precio por kg</label>
+                            <input type="number" id="precio" name="precio" min="0" step="any"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="estado" class="block text-sm font-medium text-gray-700">Estado del
+                                Pedido</label>
+                            <select id="estado" name="estado"
+                                class="w-full px-3 py-2 border rounded-md text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+                                required>
+                                <option value="pagado">Pagado</option>
+                                <option value="deuda">En deuda</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-md transition duration-300">Registrar
+                            Pedido</button>
+                    </form>
+                </div>
+            </div>
+
+            <a href="#"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute bottom-4 right-4 flex items-center">
+                <i class="fas fa-receipt mr-2"></i> Informe Pedidos
+            </a>
+
+</body>
+
+</html>
